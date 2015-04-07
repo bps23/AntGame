@@ -502,8 +502,9 @@ public class World {
         }
     }
     
-    public void addAnt(Ant a) {
+     public void addAnt(Ant a) {
         ants.add(a);
+        a.setId(ants.indexOf(a));
     }
     
     public ArrayList<Ant> getAnts() {
