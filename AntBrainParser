@@ -20,13 +20,39 @@ public class AntBrainParser {
     ArrayList<Instruction> fsm;
     String pattern = "(Turn (Right|Left) \\d{1,4})|(Flip [1-9][0-9]* \\d{1,4} \\d{1,4})|(Sense (Here|Ahead|LeftAhead|RightAhead) \\d{1,4} \\d{1,4} (Friend(WithFood)?|Foe(WithFood|Marker|Home)?|Food|Rock|Marker [0-5]|Home))|(Mark [0-5] \\d{1,4})|(Unmark [0-5] \\d{1,4})|(PickUp \\d{1,4} \\d{1,4})|(Drop \\d{1,4})|(Move \\d{1,4} \\d{1,4})";
 
+    /**
+     * Constructor for AntBrainParser. Initializes the fsm field to a new ArrayList
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidSyntaxException
+     */
     public AntBrainParser() throws FileNotFoundException, InvalidSyntaxException {
         fsm = new ArrayList<>();
     }
 
     /**
      *
-     * @param pathName the path of the brain to be parsed
+     * @param args
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws InvalidSyntaxException
+     */
+    public static void main(String[] args) throws IOException, FileNotFoundException, InvalidSyntaxException {
+        AntBrainParser abp = new AntBrainParser();
+        abp.parseBrain("src/antgame/brains/brain1.txt");
+        abp.printInstructions();
+    }
+
+    /**
+     * Constructor of AntBrainParser. Reads a text file and calls for each line
+     * of the document a parsing method and adds the returned instruction object
+     * to the ArrayList of instructions that simulates the brain.
+     *
+     * @param pathName the path of the brain file to parse
+     * @return An ArrayList of instructions representing the FSM
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws InvalidSyntaxException
      */
     public ArrayList<Instruction> parseBrain(String pathName) throws FileNotFoundException, IOException, InvalidSyntaxException {
         BufferedReader br = new BufferedReader(new FileReader(pathName));
@@ -39,8 +65,10 @@ public class AntBrainParser {
     }
 
     /**
+     * Parsing method. Parses a line of text in a instruction object storing the
+     * arguments of each line of the brain file.
      *
-     * @param line the line to be pqrsed
+     * @param line
      * @throws java.io.IOException
      * @throws antgame.errors.InvalidSyntaxException
      */
@@ -54,7 +82,7 @@ public class AntBrainParser {
 //        if (line.matches(pattern)) {
         syntaxCheck(line);
         String[] row = line.split(" ");
-        for(int j = 0; j < row.length; j++) {
+        for (int j = 0; j < row.length; j++) {
             switch (row[0]) {
                 case "Sense":
                     switch (row[1]) {
@@ -145,15 +173,25 @@ public class AntBrainParser {
         }
     }
 
+    /**
+     * Checks whether the line passed as parameter is syntactically correct by comparing it
+     * to the regular expression pattern.
+     *
+     * @param line the line to be checked
+     * @throws InvalidSyntaxException
+     */
     public void syntaxCheck(String line) throws InvalidSyntaxException {
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(line);
         boolean matches = m.matches();
-        if(!matches){
+        if (!matches) {
             throw new InvalidSyntaxException("Invalid Syntax");
         }
     }
 
+    /**
+     *
+     */
     public void printInstructions() {
         for (Instruction i : fsm) {
             System.out.println(i.toString());
