@@ -1,0 +1,173 @@
+package antgame;
+
+/**
+ *
+ * @author team3
+ */
+public class Ant {
+
+    Color color;
+    int id;
+    int state;
+    int resting; //keeps track of how long the ant has to rest after its last move before any other action.
+    int direction;
+    boolean has_food;
+    Cell cell;
+    World w;
+
+    /**
+     * Constructor for Ant objects. Assigns the ant to a world and 
+     * initializes it on a cell.
+     *
+     * @param w the world in which the ant is
+     * @param cell the cell where the ant will be initialized
+     * @param c the color of the ant
+     */
+    public Ant(World w, Cell cell, Color c) {
+        this.w = w;
+        this.cell = cell;
+        color = c;
+        cell.setAnt(this);
+
+
+    }
+
+    /**
+     * Getter method for the state of the ant.
+     *
+     * @return the state of the ant
+     */
+    public int state() {
+        return state;
+    }
+
+    /**
+     * Getter method for the color of the ant.
+     *
+     * @return the color of the ant
+     */
+    public Color color() {
+        return color;
+    }
+
+    /**
+     * Getter method for the amount of resting time the ant needs.
+     *
+     * @return the number of rounds the ant still has to rest
+     */
+    public int resting() {
+        return resting;
+    }
+
+    /**
+     * Getter method for boolean has_food.
+     *
+     * @return whether the ant has food
+     */
+    public boolean has_food() {
+        return has_food;
+    }
+
+    /**
+     * Setter method for the state of the ant.
+     *
+     * @param s the state to be set
+     */
+    public void set_state(int s) {
+        state = s;
+    }
+
+    /**
+     * Setter method for the amount of resting time the ant needs.
+     *
+     * @param r the resting time to be set
+     */
+    public void set_resting(int r) {
+        resting = r;
+    }
+
+    /**
+     * Setter method for the ant's direction.
+     *
+     * @param d the direction to be set
+     */
+    public void set_direction(int d) {
+        if (d >= 0 && d < 6) {
+            direction = d;
+        } else {
+            System.out.println("Can't set direction"); //Consider throwing an exception
+        }
+    }
+
+    /**
+     * Setter method for boolean has_food.
+     *
+     * @param b sets whether the ant carries food
+     */
+    public void set_has_food(boolean b) {
+        has_food = b;
+    }
+
+    /**
+     * Getter method for the cell field.
+     *  
+     * @return the cell on which the ant currently is
+     */
+    public Cell getCell() {
+        return cell;
+    }
+
+    /**
+     * Setter method for the cell field.
+     *
+     * @param cell sets the cell on which the ant is
+     */
+    public void setCell(Cell cell) {
+        this.cell = cell;
+    }
+
+    /**
+     * Getter method for the ant's id.
+     *
+     * @return the id of the ant
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Setter method for the id field.
+     * 
+     * @param id the id to be set for the ant
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Getter method for the ant's direction
+     *
+     * @return the direction of the ant
+     */
+    public int getDirection() {
+        return direction;
+    }
+
+    /**
+     * Setter method of the ant's color.
+     *
+     * @param color the color to be set for the ant
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    /**
+     * Getter method for the ant's color.
+     *
+     * @return the color of the ant
+     */
+    public Color getColor() {
+        return color;
+    }
+}
