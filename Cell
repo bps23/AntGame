@@ -1,0 +1,266 @@
+package antgame;
+
+/**
+ *
+ * @author team3
+ */
+public class Cell {
+
+    private final int x;
+    private final int y;
+    private boolean antAtCell;
+    private boolean hillAtCell;
+    private boolean isRocky;
+    private Ant ant;
+    private int amountOfFood;
+    private AntHill antHill;
+    private boolean markerAtCell;
+    private int[] redMarker;
+    private int[] blackMarker;
+
+    /**
+     * Constructor for Cell. Cell are just cells in the grid that constitutes
+     * the map.
+     *
+     * @param x x coordinate of the cell
+     * @param y y coordinate of the cell
+     */
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
+        antAtCell = false;
+        hillAtCell = false;
+        isRocky = false;
+        redMarker = new int[20];
+        blackMarker = new int[20];
+        amountOfFood = 0;
+    }
+
+    /**
+     * Getter method for the x coordinate.
+     *
+     * @return the x coordinate
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
+     * Getter method for the y coordinate.
+     *
+     * @return the y coordinate
+     */
+    public int getY() {
+        return y;
+    }
+
+    /**
+     * Getter method for boolean hasAnt.
+     *
+     * @return whether the cell currently has an ant on it
+     */
+    public boolean hasAnt() {
+        return antAtCell;
+    }
+
+    /**
+     * Setter method for the ant.
+     *
+     * @param a the to be put on the cell
+     */
+    public void setAnt(Ant a) {
+        ant = a;
+        antAtCell = true;
+        //Consider whether we need to store the ant inside the cell class
+
+    }
+
+    /**
+     * Getter method for the eventual ant in the cell.
+     *
+     * @return the ant on the cell
+     */
+    public Ant getAnt() {
+        return ant;
+    }
+
+    /**
+     * Getter method for the amount of food in the cell.
+     *
+     * @return the amount of food lying in the cell
+     */
+    public int getAmountOfFood() {
+        return amountOfFood;
+    }
+
+    /**
+     * Setter method for the amount of food in the cell.
+     *
+     * @param food the amount of food to be added
+     */
+    public void set_food(int food) {
+        if (!isRocky) {
+            amountOfFood += food;
+        }
+    }
+
+    /**
+     * Setter method for the eventual anthill on the cell.
+     *
+     * @param ah the anthill to be set on the cell
+     */
+    public void set_anthill(AntHill ah) {
+        if (!isRocky) {
+            antHill = ah;
+            hillAtCell = true;
+            antAtCell = true;
+        }
+    }
+
+    /**
+     * Getter method for boolean has_anthill.
+     *
+     * @return whether the cell has an anthill on it
+     */
+    public boolean has_anthill() {
+        return hillAtCell;
+    }
+
+    /**
+     * Getter method for the eventual anthill on the cell.
+     *
+     * @return the anthill on the cell
+     */
+    public AntHill getAntHill() {
+        return antHill;
+    }
+
+    /**
+     * Gets all red markers in the cell
+     *
+     * @return the array of red markers in this cell
+     */
+    public int[] getRedMarker() {
+        return redMarker;
+    }
+
+    /**
+     * Gets all black markers in the cell
+     *
+     * @return the array of black markers in this cells
+     */
+    public int[] getBlackMarker() {
+        return blackMarker;
+    }
+
+    /**
+     * Set the cell to a rocky cell.
+     */
+    public void setRocky() {
+        isRocky = true;
+    }
+
+    /**
+     * Getter method of boolean isRocky.
+     *
+     * @return whether the cell is rocky
+     */
+    public boolean isRocky() {
+        return isRocky;
+    }
+
+    /**
+     * Clears (= erases references to it))the ant on this cell.
+     */
+    public void clearAnt() {
+        ant = null;
+        antAtCell = false;
+    }
+
+    /**
+     * Sets a chemical marker on the cell. The marker has a specific color and
+     * type.
+     *
+     * @param c the color of the marker to be set
+     * @param i the type of the marker to be set
+     */
+    public void set_marker_at(Color c, int i) {
+        switch (c) {
+            case RED:
+                redMarker[i] = 1;
+                break;
+            case BLACK:
+                blackMarker[i] = 1;
+                break;
+        }
+        markerAtCell = true;
+    }
+
+    /**
+     * Clears a particular marker on the cell defined by the arguments.
+     *
+     * @param c the color of the marker to be cleared
+     * @param i the type of the marker to be cleared
+     */
+    public void clear_marker_at(Color c, int i) {
+        switch (c) {
+            case RED:
+                redMarker[i] = -1;
+                break;
+            case BLACK:
+                blackMarker[i] = -1;
+                break;
+        }
+    }
+
+    /**
+     * Checks if the particular marker defined by the parameters is in the cell.
+     *
+     * @param c the color of the marker to be checked
+     * @param i the type of marker that will be checked
+     * @return whether this particular marker is in the cell
+     */
+    public boolean check_marker_at(Color c, int i) {
+        switch (c) {
+            case RED:
+                if (redMarker[i] == 1) {
+                    return true;
+                }
+                break;
+            case BLACK:
+                if (blackMarker[i] == 1) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there is any marker in the cell.
+     *
+     * @param c the color of the markers to be checked
+     * @return whether there is any marker of this color in the cell
+     */
+    public boolean check_any_marker_at(Color c) {
+        boolean found = false;
+        switch (c) {
+            case RED:
+                for (int i = 0; i < redMarker.length; i++) {
+                    if (redMarker[i] == 1) {
+                        found = true;
+                    }
+                }
+                break;
+
+            case BLACK:
+                for (int i = 0; i < blackMarker.length; i++) {
+                    if (blackMarker[i] == 1) {
+                        found = true;
+                    }
+                }
+                break;
+        }
+        return found;
+    }
+}
