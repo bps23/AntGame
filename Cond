@@ -1,0 +1,179 @@
+/**
+ *
+ * @author team3
+ */
+package antgame;
+
+/**
+ *
+ */
+public class Cond {
+}
+
+/**
+ *
+ */
+class Friend extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Friend";
+    }
+};
+
+/**
+ *
+ */
+class Foe extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Foe";
+    }
+};
+
+/**
+ *
+ */
+class FriendWithFood extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "FriendWithFood";
+    }
+};
+
+/**
+ *
+ */
+class FoeWithFood extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "FoeWithFood";
+    }
+};
+
+/**
+ *
+ */
+class Food extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Food";
+    }
+};
+
+/**
+ *
+ */
+class Rock extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Rock";
+    }
+};
+
+/**
+ *
+ */
+class Marker extends Cond {
+
+    int i;
+
+    /**
+     *
+     * @param i the type of the marker
+     */
+    public Marker(int i) {
+        this.i = i;
+    }
+
+    /**
+     *
+     * @return the type of the marker as an integer
+     */
+    public int getI() {
+        return i;
+    }
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Marker";
+    }
+};
+
+/**
+ *
+ */
+class FoeMarker extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "FoeMarker";
+    }
+};
+
+/**
+ *
+ */
+class Home extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "Home";
+    }
+};
+
+/**
+ *
+ */
+class FoeHome extends Cond {
+
+    /**
+     *
+     * @return a string of the type of the instruction
+     */
+    @Override
+    public String toString() {
+        return "FoeHome";
+    }
+};
