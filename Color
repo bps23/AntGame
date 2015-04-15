@@ -1,0 +1,37 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package antgame;
+
+/**
+ *
+ * @team3
+ */
+public enum Color {
+
+    /**
+     * Red color for the ants and anthills.
+     */
+    RED,
+    /**
+     * Black color for the ants and anthills.
+     */
+    BLACK;
+
+    /**
+     * Given a color, returns the opposite.
+     *
+     * @param c some team color
+     * @return the opposite color
+     */
+    public Color other_color(Color c) {
+        switch (c) {
+            case RED:
+                return BLACK;
+            case BLACK:
+                return RED;
+        }
+        return null;
+    }
+}
