@@ -1,0 +1,155 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package antgame;
+
+import antgame.errors.InvalidSyntaxException;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author bps23
+ */
+public class Contest {
+
+    int redScore;
+    int blackScore;
+    int numberOfGames;
+    int numberOfPlayers;
+    int winner;
+    ArrayList<AntBrain> players;
+    int[] wins;
+    boolean isFinished;
+    int nextPlayer;
+    ArrayList<Game> games;
+
+    /**
+     * Constructor for Contest. Initializes players and games to new ArrayList
+     * and wins to a new integer array. The class is intended to manage
+     * matchmaking with more than 2 players and to be able to keep track of the
+     * games and scores of the previous games.
+     *
+     * @param numberOfPlayers the number of players taking part in the contest
+     */
+    public Contest(int numberOfPlayers) throws InvalidSyntaxException {
+        this.numberOfPlayers = numberOfPlayers;
+        players = new ArrayList<>();
+        games = new ArrayList<>(numberOfPlayers);
+        wins = new int[numberOfPlayers];
+    }
+
+    /**
+     * Getter method for the list of players (an ArrayList of AntBrains)
+     *
+     * @return the list of players (list of their brains)
+     */
+    public ArrayList<AntBrain> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Getter method for boolean isFinished.
+     *
+     * @return whether the contest is finished
+     */
+    public boolean isFinished() {
+        return isFinished;
+    }
+    World world;
+
+    /**
+     * Checks whether there is a winner amongst the players and updates the
+     * winner. If not, launches a new series of games to determine one.
+     */
+    public int gameEnd() {
+        int i = 0;
+        for (int win : wins) {
+            if (win > numberOfGames + 1) {
+                isFinished = true;
+                winner = wins[i];
+                return winner;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    /**
+     * Sets up a new game and records the score for each color as well as the
+     * winner of the game.
+     *
+     * @param game the game to be launched
+     */
+    public void launchNewGame(Game game) {
+        World w = game.getWorld();
+        AntBrain redPlayer = game.getRedPlayer();
+        AntBrain blackPlayer = game.getBlackPlayer();
+        redScore = game.getScore(w, Color.RED);
+        blackScore = game.getScore(w, Color.BLACK);
+
+        if (redScore > blackScore) {
+            game.setWinner(game.gameWinner.REDPLAYER);
+        } else if (blackScore > redScore) {
+            game.setWinner(game.gameWinner.BLACKPLAYER);
+        } else {
+            game.setWinner(game.gameWinner.DRAW);
+        }
+    }
+
+    /**
+     * Launches a new series of games.
+     */
+    public void newSeries() {
+        for (Game game : games) {
+            launchNewGame(game);
+            switch (game.getWinner()) {
+                case REDPLAYER:
+                    for (int i = 0; i < numberOfPlayers; i++) {
+                        if (game.getRedPlayer() == players.get(i)) {
+                            wins[i]++;
+                        }
+                    }
+                    break;
+
+                case BLACKPLAYER:
+                    for (int i = 0; i < numberOfPlayers; i++) {
+                        if (game.getBlackPlayer() == players.get(i)) {
+                            wins[i]++;
+                        }
+                    }
+                    break;
+                case DRAW:
+                    break;
+            }
+        }
+
+        gameEnd();
+    }
+
+    /**
+     * Sets up games by computing all matches to occur with the given players in
+     * the world passed as parameter.
+     *
+     * @param brains a list of players (list of ant brains)
+     * @param w world where the games take place
+     */
+    public void setupGames(ArrayList<AntBrain> brains, World w) throws InvalidSyntaxException {
+        int playerNotSet = brains.size();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            for (int j = playerNotSet - 1; j > 0; j--) {
+                games.add(new Game(players.get(i), players.get(j), w));
+                games.add(new Game(players.get(j), players.get(i), w));
+            }
+            playerNotSet--;
+        }
+    }
+
+    public void addPlayer(AntBrain b) {
+        players.add(b);
+    }
+
+    public ArrayList<Game> getGames() {
+        return games;
+    }
+}
