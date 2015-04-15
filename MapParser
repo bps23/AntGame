@@ -1,0 +1,183 @@
+package antgame;
+
+import java.awt.GridLayout;
+import java.io.*;
+import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author team3
+ */
+public class MapParser {
+
+    int x; //The x length of the map
+    int y; //The y length of the map
+    JLabel[][] labelsArray; //A two dimensional array to store the map
+    JPanel worldGrid;
+    Cell[][] cells;
+    ArrayList<Ant> ants = new ArrayList<>();
+    World world;
+
+    /**
+     *
+     */
+    public MapParser() {
+    }
+
+    /**
+     *
+     * Loads a world file through its file path and then reads it line by line.
+     * For each line a parsing method is called to translate the characters into
+     * icons for the GUI and ultimately sets up the JPanel where the graphics
+     * are being displayed.
+     *
+     * @param pathName the path of the world file
+     * @return the world extracted from the file
+     * @throws FileNotFoundException
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public World loadWorld(String pathName) throws FileNotFoundException, IOException {
+        worldGrid = new JPanel();
+        int n = 0; //Counter to read the numbers
+        BufferedReader br = new BufferedReader(new FileReader(pathName));
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (n == 0) {
+                x = Integer.parseInt(line);
+            } else if (n == 1) {
+                y = Integer.parseInt(line);
+                labelsArray = new JLabel[x][y];
+                cells = new Cell[x][y];
+                worldGrid.setLayout(new GridLayout(x, y));
+            } else if (n > 1) {
+                parseLine(line, n - 2);
+            }
+            n++;
+        }
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                worldGrid.add(labelsArray[i][j]);
+
+            }
+        }
+        world = new World(cells, ants);
+        return world;
+    }
+
+    /**
+     * Parses the line passed as a parameter and translates it to icons stored
+     * in an array of JLabels representing the world grid.
+     *
+     * @param line the line to be parsed
+     * @param y the index of the line
+     */
+    public void parseLine(String line, int y) {
+        int i = 0;
+        char[] row = line.toCharArray();
+        for (int j = 0; j < row.length; j++) {
+            switch (row[j]) {
+                case '#':
+                    labelsArray[y][i] = new JLabel(new ImageIcon("src/antgame/graphics/rocky.png"));
+                    cells[y][i] = new Cell(y, i);
+                    cells[y][i].setRocky();
+                    i++;
+                    break;
+                case '.':
+                    labelsArray[y][i] = new JLabel(new ImageIcon("src/antgame/graphics/empty_cell.png"));
+                    cells[y][i] = new Cell(y, i);
+                    i++;
+                    break;
+                case '+':
+                    labelsArray[y][i] = new JLabel(new ImageIcon("src/antgame/graphics/red_anthill.png"));
+                    cells[y][i] = new Cell(y, i);
+                    AntHill ahr = new AntHill(world, cells[y][i], Color.RED);
+                    cells[y][i].set_anthill(ahr);
+                    ants.add(ahr.getA());
+                    ahr.getA().setId(ants.indexOf(ahr.getA()));
+                    i++;
+                    break;
+                case '-':
+                    labelsArray[y][i] = new JLabel(new ImageIcon("src/antgame/graphics/black_anthill.png"));
+                    cells[y][i] = new Cell(y, i);
+                    AntHill ahb = new AntHill(world, cells[y][i], Color.BLACK);
+                    cells[y][i].set_anthill(ahb);
+                    ants.add(ahb.getA());
+                    ahb.getA().setId(ants.indexOf(ahb.getA()));
+                    i++;
+                    break;
+            }
+            if (Character.isDigit(row[j])) {
+                labelsArray[y][i] = new JLabel(new ImageIcon("src/antgame/graphics/food.png"));
+                cells[y][i] = new Cell(y, i);
+                cells[y][i].set_food(Character.getNumericValue(row[j]));
+                i++;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param input
+     */
+//    public void makeGraphic(String input) {
+//        worldGrid.add(new JLabel(input));
+//    }
+    /**
+     * Getter method for the x-length of the map
+     *
+     * @return the length of the map
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
+     * Getter method for the y-height of the map
+     *
+     * @return the height of the map
+     */
+    public int getY() {
+        return y;
+    }
+
+    /**
+     * Getter method for the array containing the graphics' labels.
+     *
+     * @return the array of labels storing the map
+     */
+    public JLabel[][] getLabelsArray() {
+        return labelsArray;
+    }
+
+    /**
+     * Getter method for the JPanel containing the graphics.
+     *
+     * @return the panel where the world is displayed
+     */
+    public JPanel getWorldGrid() {
+        return worldGrid;
+    }
+
+    /**
+     * Getter method for the array storing cells of the map.
+     *
+     * @return the arrays of cells storing the map
+     */
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    /**
+     * Getter method for accessing the world.
+     *
+     * @return the world in which the game takes place
+     */
+    public World getWorld() {
+        return world;
+    }
+}
